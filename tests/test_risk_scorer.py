@@ -1,8 +1,8 @@
 from pathlib import Path
 
 import pandas as pd
-
-from configure import ground_truth, scenarios
+from dt_ml.risk_scorer import score
+from config import ground_truth, scenarios
 from dt_ml.simulation_engine import run
 from dt_ml.validation import validate_model
 
@@ -39,14 +39,44 @@ def run_validation():
         model_predict_fn=price_model_wrapper,
     )
 
+def test_low_risk_prediction():
+    # Test case for a low-risk prediction
+    prediction = {
+        "predicted_kpis": {
+            "revenue_delta_pct": 5,
+            "churn_delta_pct": 1,
+            "cost_delta_pct": 2,
+        },
+        "confidence_score": 80,
+    }
+    result = score(decision_type="price_change", magnitude=10, prediction=prediction)
+    assert result["risk_level"] == "Low"
+    assert result["risk_score"] == 0
 
-if __name__ == "__main__":  # check whether the used file is imported or not. It is a dunder keyword.
-    results = run_validation()
-##for debugging purpose we are checking whether the results contains the required metrics or not.
-    assert "mape" in results
-    assert "directional_accuracy" in results
-    assert "rmse" in results
+def test_medium_risk_prediction():
+    # Test case for a medium-risk prediction
+    prediction = {
+        "predicted_kpis": {
+            "revenue_delta_pct": -5,
+            "churn_delta_pct": 3,
+            "cost_delta_pct": 15,
+        },
+        "confidence_score": 50,
+    }
+    result = score(decision_type="price_change", magnitude=15, prediction=prediction)
+    assert result["risk_level"] == "Medium"
+    assert result["risk_score"] > 0 and result["risk_score"] <= 66
 
-    print(results)
-
-
+def test_high_risk_prediction():
+    # Test case for a high-risk prediction
+    prediction = {
+        "predicted_kpis": {
+            "revenue_delta_pct": -10,
+            "churn_delta_pct": 5,
+            "cost_delta_pct": 20,
+        },
+        "confidence_score": 30,
+    }
+    result = score(decision_type="price_change", magnitude=30, prediction=prediction)
+    assert result["risk_level"] == "High"
+    assert result["risk_score"] > 66

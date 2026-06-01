@@ -2,11 +2,12 @@ from pathlib import Path
 
 import pandas as pd
 
-from configure import ground_truth, scenarios
+from config import ground_truth, scenarios
 from dt_ml.baseline_analytics import compute
 from dt_ml.risk_scorer import score
 from dt_ml.simulation_engine import run
 from dt_ml.validation import validate_model
+from dt_ml.validation.report_builder import build_validation_report
 from memory_cleaner import clear_memory
 
 
@@ -60,6 +61,10 @@ def main():
         simulation_result,
     )
     print(risk)
+
+    report_path = PROJECT_ROOT / "validation_report.pdf"
+    generated_report = build_validation_report(output_path=str(report_path))
+    print(f"\nPDF report generated: {generated_report}")
 
     clear_memory()
 
