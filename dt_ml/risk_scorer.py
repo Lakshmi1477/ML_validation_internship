@@ -6,7 +6,6 @@ def score(decision_type, magnitude, prediction):
 
     predicted_kpis = prediction.get("predicted_kpis", {})
     confidence = prediction.get("confidence_score", 100)
-
     revenue_delta_pct = predicted_kpis.get("revenue_delta_pct", 0)
     churn_delta_pct = predicted_kpis.get("churn_delta_pct", 0)
     cost_delta_pct = predicted_kpis.get("cost_delta_pct", 0)
@@ -34,6 +33,14 @@ def score(decision_type, magnitude, prediction):
     if abs(magnitude) > 25:
         risk_score += 15
         factors.append("Magnitude > 25%")
+
+    if decision_type == "headcount" and magnitude < -20:
+        risk_score += 40
+        factors.append("Large layoff > 20 employees")
+
+    if decision_type == "marketing" and magnitude > 20000:
+        risk_score += 35
+        factors.append("Marketing spend spike > 20k")
 
     if decision_type in ["headcount", "marketing"] and cost_delta_pct > 10:
         risk_score += 10

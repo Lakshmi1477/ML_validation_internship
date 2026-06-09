@@ -28,7 +28,7 @@ from dt_ml.validation.thresholds import (
 )
 
 
-def _register_times_font() -> str:
+def _register_times_font() -> str:                          #font used in the report
     """Use Times New Roman when it is available on Windows.
 
     ReportLab ships with the Times family. When the system font is present,
@@ -52,11 +52,11 @@ def _register_times_font() -> str:
     return "Times-Roman"
 
 
-def _safe_number(value: Any) -> Any:
+def _safe_number(value: Any) -> Any:                    
     if value is None:
         return "-"
     if isinstance(value, float):
-        return round(value, 2)
+        return round(value, 2)                              #round fig
     return value
 
 
@@ -64,7 +64,7 @@ def _format_percent(value: Any) -> str:
     if value is None or value == "-":
         return "-"
     try:
-        return f"{float(value):.2f}%"
+        return f"{float(value):.2f}%"                          #cutoff
     except (TypeError, ValueError):
         return str(value)
 

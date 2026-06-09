@@ -33,7 +33,7 @@ def validate_model(
 
         actual_delta = ground_truth[
             sc["scenario_id"]
-        ]
+        ] # 5.0 - {"revenue_delta_pct": -5.0}                  #compare and evaluate the risk
 
         results.append({
 

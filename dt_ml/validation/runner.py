@@ -4,7 +4,7 @@ from sklearn.metrics import (
 )
 
 import numpy as np
-
+#this file is created to check whether the predicted reesults are matching with the actual results or not and then calculating the metrics like mape, directional accuracy and rmse to evaluate the performance of the model.
 
 def validate_model(
     model_predict_fn,

@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "timestamp": "2026-06-09T11:23:28.734957",
+    "week": 5,
+    "scenario": "headcount: -50 units",
+    "issue_type": "plausibility",
+    "description": "Layoff of 50 people not marked as High Risk",
+    "severity": "high",
+    "status": "open",
+    "resolved_in_version": null
+  },
+  {
+    "id": 2,
+    "timestamp": "2026-06-09T11:23:28.737441",
+    "week": 5,
+    "scenario": "marketing: 30000 units",
+    "issue_type": "plausibility",
+    "description": "Massive spend increase $30000 not marked High Risk",
+    "severity": "high",
+    "status": "open",
+    "resolved_in_version": null
+  }
+]

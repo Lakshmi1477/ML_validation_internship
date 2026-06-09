@@ -1,0 +1,29 @@
+{
+  "week": 5,
+  "timestamp": "2026-06-09T11:22:07.597275",
+  "scenarios_tested": 12,
+  "datasets_used": 5,
+  "risk_distribution": {
+    "total_issues": 139,
+    "open_issues": 139,
+    "resolved_issues": 0,
+    "issues_by_type": {
+      "runtime_error": 138,
+      "plausibility": 1
+    },
+    "issues_by_severity": {
+      "high": 139,
+      "medium": 0,
+      "low": 0
+    }
+  },
+  "rubric_version_current": "v1",
+  "rubric_version_next": "v2",
+  "next_actions": [
+    "Update risk_scorer.py RUBRIC_VERSION to 'v2'",
+    "Adjust magnitude thresholds based on plausibility issues",
+    "Add new risk factor for negative revenue impact",
+    "Re-run validation suite with updated rubric",
+    "Generate Week 6 Validation Report"
+  ]
+}
