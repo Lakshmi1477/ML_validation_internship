@@ -4,7 +4,11 @@ from sklearn.metrics import (
 )
 
 import numpy as np
+import logging
 #this file is created to check whether the predicted reesults are matching with the actual results or not and then calculating the metrics like mape, directional accuracy and rmse to evaluate the performance of the model.
+
+
+logger = logging.getLogger(__name__)
 
 def validate_model(
     model_predict_fn,
@@ -36,6 +40,13 @@ def validate_model(
 
     Returns a dict with rounded metric values.
     """
+
+    logger.info(
+        "TEMP START validate_model test_shape=%s scenarios=%s ground_truth=%s",
+        getattr(test_df, "shape", None),
+        len(scenarios),
+        len(ground_truth),
+    )
 
     results = []
 
@@ -95,6 +106,14 @@ def validate_model(
 
     # Fraction of scenarios where predicted and actual directional sign match
     directional_accuracy = sum(r["directional_hit"] for r in results) / len(results)
+
+    logger.info(
+        "TEMP END validate_model results=%s mape=%s rmse=%s directional_accuracy=%s",
+        len(results),
+        round(mape, 4),
+        round(rmse, 4),
+        round(directional_accuracy, 4),
+    )
 
     # Return rounded values for readability/consistency
     return {

@@ -1,8 +1,12 @@
 import pandas as pd
+import logging
 
 from dt_ml.models.price_model import predict as price_predict
 from dt_ml.models.headcount_model import predict as headcount_predict
 from dt_ml.models.marketing_model import predict as marketing_predict
+
+
+logger = logging.getLogger(__name__)
 
 
 DISPATCH = {
@@ -13,6 +17,7 @@ DISPATCH = {
 
 
 def summarize_baseline(df: pd.DataFrame):
+    logger.info("TEMP START summarize_baseline shape=%s rows=%s cols=%s", df.shape, len(df), len(df.columns))
 
     revenue = 0
 
@@ -35,6 +40,11 @@ def project_after(
     baseline: dict,
     prediction: dict,
 ):
+    logger.info(
+        "TEMP START project_after baseline_keys=%s prediction_keys=%s",
+        list(baseline.keys()),
+        list(prediction.keys()),
+    )
 
     revenue_before = baseline["estimated_revenue"]
 
@@ -57,6 +67,14 @@ def run(
     magnitude: float,
     magnitude_type: str,
 ):
+    logger.info(
+        "TEMP START run decision_type=%s parameter=%s magnitude=%s magnitude_type=%s shape=%s",
+        decision_type,
+        parameter,
+        magnitude,
+        magnitude_type,
+        df.shape,
+    )
 
     if decision_type not in DISPATCH:
         raise ValueError(
@@ -81,5 +99,7 @@ def run(
             result,
         ),
     }
+
+    logger.info("TEMP END run result_keys=%s", list(result.keys()))
 
     return result

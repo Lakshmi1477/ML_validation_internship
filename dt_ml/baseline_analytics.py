@@ -1,7 +1,12 @@
 import pandas as pd
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 def compute(df: pd.DataFrame):
+    logger.info("TEMP START compute shape=%s rows=%s cols=%s", df.shape, len(df), len(df.columns))
 
     df = df.copy()
 
@@ -96,6 +101,13 @@ def compute(df: pd.DataFrame):
     data_quality_score = round(
         1 - missing_ratio,
         2,
+    )
+
+    logger.info(
+        "TEMP END compute monthly_rows=%s trend=%s warnings=%s",
+        len(monthly_revenue),
+        trend,
+        len(warnings),
     )
 
     return {

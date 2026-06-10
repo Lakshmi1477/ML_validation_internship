@@ -1,4 +1,16 @@
+import logging
+
+
+logger = logging.getLogger(__name__)
+
+
 def score(decision_type, magnitude, prediction):
+    logger.info(
+        "TEMP START score decision_type=%s magnitude=%s prediction_keys=%s",
+        decision_type,
+        magnitude,
+        list(prediction.keys()) if isinstance(prediction, dict) else type(prediction).__name__,
+    )
     #score function is a simple rule-based system that assigns a risk score based on the predicted KPIs and confidence score. 
     # It considers factors such as the magnitude of the decision, predicted changes in revenue and churn, and the confidence level of the prediction. The final risk score is categorized into Low, Medium, or High risk levels, with an explanation of the contributing factors.
     risk_score = 0
@@ -26,11 +38,15 @@ def score(decision_type, magnitude, prediction):
         risk_score += 5
         factors.append("Confidence < 60")
 
+    if confidence < 50:
+        risk_score += 35
+        factors.append("Confidence < 50")
+
     if confidence < 40:
         risk_score += 15
         factors.append("Confidence < 40")
 
-    if abs(magnitude) > 25:
+    if abs(magnitude) >= 25:
         risk_score += 15
         factors.append("Magnitude > 25%")
 
@@ -60,6 +76,8 @@ def score(decision_type, magnitude, prediction):
         if factors
         else f"{level} risk decision because no major risk factors were triggered."
     )
+
+    logger.info("TEMP END score risk_level=%s risk_score=%s factors=%s", level, risk_score, len(factors))
 
     return {
         "risk_level": level,

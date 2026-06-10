@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -26,6 +27,9 @@ from dt_ml.validation.thresholds import (
     MARKETING_MODEL_THRESHOLDS,
     PRICE_MODEL_THRESHOLDS,
 )
+
+
+logger = logging.getLogger(__name__)
 
 
 def _register_times_font() -> str:                          #font used in the report
@@ -415,6 +419,13 @@ def build_validation_report(
     risk_results: dict | None = None,
     output_path: str = "validation_report_week_4.pdf",
 ) -> str:
+    logger.info(
+        "TEMP START build_validation_report metrics_provided=%s risk_results_provided=%s output_path=%s",
+        metrics is not None,
+        risk_results is not None,
+        output_path,
+    )
+
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -605,6 +616,8 @@ def build_validation_report(
         )
         canvas.restoreState()
 
+    logger.info("TEMP build_validation_report generating PDF elements=%s", len(story))
     doc.build(story, onFirstPage=_draw_footer, onLaterPages=_draw_footer)
+    logger.info("TEMP END build_validation_report saved=%s", output_path)
     return str(output_path)
 

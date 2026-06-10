@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import logging
 
 from sklearn.linear_model import LinearRegression
 
@@ -10,12 +11,22 @@ from dt_ml.feature_eng import (
 )
 
 
+logger = logging.getLogger(__name__)
+
+
 def predict(
     df: pd.DataFrame,
     parameter: str,
     magnitude: float,
     magnitude_type: str,
 ) -> dict:
+    logger.info(
+        "TEMP START price_model.predict shape=%s parameter=%s magnitude=%s magnitude_type=%s",
+        df.shape,
+        parameter,
+        magnitude,
+        magnitude_type,
+    )
 
     required_cols = ["price_per_unit", "units_sold"]
 
@@ -88,6 +99,13 @@ def predict(
         95.0,
         max(40.0, r2_score * 100)
     )
+    )
+
+    logger.info(
+        "TEMP END price_model.predict rows=%s revenue_delta_pct=%s confidence=%s",
+        len(df),
+        round(revenue_delta_pct, 2),
+        round(confidence, 1),
     )
     
 

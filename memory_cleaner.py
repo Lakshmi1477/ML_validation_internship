@@ -139,6 +139,7 @@ def clear_memory(clean_trash=False):
     """Clear safe project-local caches and optionally Linux trash."""
 
     logger.info("Starting memory cleanup...")
+    logger.info("TEMP START clear_memory clean_trash=%s", clean_trash)
 
     results = {
         "pycache_removed": clear_pycache_directories(),
@@ -148,6 +149,7 @@ def clear_memory(clean_trash=False):
 
     total_items = sum(results.values())
     logger.info("Cleanup complete. Total items removed: %s", total_items)
+    logger.info("TEMP END clear_memory results=%s", results)
 
     return results
 

@@ -1,90 +1,9 @@
-from sklearn.metrics import (
-    mean_absolute_percentage_error,
-    mean_squared_error,
-)
+"""Compatibility wrapper for the shared validation implementation.
 
-import numpy as np
+Keep this module as a stable import target for older code while delegating the
+actual logic to dt_ml.validation.runner.
+"""
 
+from .runner import validate_model
 
-def validate_model(
-    model_predict_fn,
-    test_df,
-    ground_truth,
-    scenarios,
-):
-
-    results = []
-
-    for sc in scenarios:
-
-        prediction = model_predict_fn(
-            test_df,
-            sc["parameter"],
-            sc["magnitude"],
-            sc["magnitude_type"],
-        )
-
-        pred_delta = prediction[
-            "predicted_kpis"
-        ].get(
-            "revenue_delta_pct",
-            0,
-        )
-
-        actual_delta = ground_truth[
-            sc["scenario_id"]
-        ] # 5.0 - {"revenue_delta_pct": -5.0}                  #compare and evaluate the risk
-
-        results.append({
-
-            "predicted": pred_delta,
-
-            "actual": actual_delta,
-
-            "directional_hit":
-                np.sign(pred_delta)
-                ==
-                np.sign(actual_delta),
-        })
-
-    mape = mean_absolute_percentage_error(
-        [r["actual"] for r in results],
-        [r["predicted"] for r in results],
-    )
-
-    rmse = np.sqrt(
-        mean_squared_error(
-            [r["actual"] for r in results],
-            [r["predicted"] for r in results],
-        )
-    )
-
-    directional_accuracy = sum(
-        r["directional_hit"]
-        for r in results
-    ) / len(results)
-
-    return {
-        "mape": round(mape, 4),
-        "rmse": round(rmse, 4),
-        "directional_accuracy": round(
-            directional_accuracy,
-            4,
-        ),
-    }
-
-
-PRICE_MODEL_THRESHOLDS = {
-    "mape": 0.18,
-    "directional_accuracy": 0.80,
-}
-
-HEADCOUNT_MODEL_THRESHOLDS = {
-    "mape": 0.25,
-    "directional_accuracy": 0.70,
-}
-
-MARKETING_MODEL_THRESHOLDS = {
-    "mape": 0.20,
-    "directional_accuracy": 0.75,
-}
+__all__ = ["validate_model"]
